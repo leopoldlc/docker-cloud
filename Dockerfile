@@ -16,16 +16,16 @@ ENV AZCLI_VERSION=${AZCLI_VERSION}
 ENV TERRAFORM_VERSION=${TERRAFORM_VERSION}
 ENV PACKER_VERSION=${PACKER_VERSION}
 
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends ansible curl python3 python3-pip python3-boto unzip wget software-properties-common
 RUN wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb \
-    && dpkg -i packages-microsoft-prod.deb \ 
-    && apt-get update \
-    && add-apt-repository universe \
-    && apt-get install -y --no-install-recommends ansible curl python3 python3-pip python3-boto unzip powershell \
-    && curl -sL https://aka.ms/InstallAzureCLIDeb | bash \
-    && curl -LO https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
+    && dpkg -i packages-microsoft-prod.deb && apt-get update \
+    && add-apt-repository universe && apt-get install -y powershell
+RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+RUN curl -LO https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
     && curl -LO https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip \
     && unzip '*.zip' -d /usr/local/bin \
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* *.zip
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* *.zip *.deb
 
 CMD ["/bin/bash"]
