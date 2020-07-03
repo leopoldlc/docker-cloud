@@ -17,8 +17,8 @@ ENV TERRAFORM_VERSION=${TERRAFORM_VERSION}
 ENV PACKER_VERSION=${PACKER_VERSION}
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends ansible curl python3 python3-pip python3-boto unzip wget software-properties-common
-RUN wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb \
+    && apt-get install -y --no-install-recommends ansible curl python3 python3-pip python3-boto unzip software-properties-common
+RUN curl -LO https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb \
     && dpkg -i packages-microsoft-prod.deb && apt-get update \
     && add-apt-repository universe && apt-get install -y powershell
 RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash
